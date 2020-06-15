@@ -32,7 +32,7 @@
 // Use one of these or SDCard-based Emulation will be used
 #if NO_EEPROM_SELECTED
   //#define SRAM_EEPROM_EMULATION                 // Use BackSRAM-based EEPROM emulation
-  #define FLASH_EEPROM_EMULATION                  // Use Flash-based EEPROM emulation
+  //#define FLASH_EEPROM_EMULATION                  // Use Flash-based EEPROM emulation
 #endif
 
 #if ENABLED(FLASH_EEPROM_EMULATION)
@@ -40,7 +40,7 @@
   // 128 kB sector allocated for EEPROM emulation.
   #define FLASH_EEPROM_LEVELING
 #endif
-
+#define I2C_EEPROM 
 //
 // Servos
 //
@@ -232,7 +232,11 @@
 //
 // Misc. Functions
 //
-
+// Filament Runout Sensor
+//
+#ifndef FIL_RUNOUT_PIN
+  #define FIL_RUNOUT_PIN  PB10
+#endif  
 #ifndef SDCARD_CONNECTION
   #define SDCARD_CONNECTION                  LCD
 #endif
