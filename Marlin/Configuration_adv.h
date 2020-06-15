@@ -371,15 +371,15 @@
  * The fan turns on automatically whenever any driver is enabled and turns
  * off (or reduces to idle speed) shortly after drivers are turned off.
  */
-//#define USE_CONTROLLER_FAN
+#define USE_CONTROLLER_FAN
 #if ENABLED(USE_CONTROLLER_FAN)
-  //#define CONTROLLER_FAN_PIN -1        // Set a custom pin for the controller fan
+  #define CONTROLLER_FAN_PIN P1_00        // Set a custom pin for the controller fan
   //#define CONTROLLER_FAN_USE_Z_ONLY    // With this option only the Z axis is considered
   #define CONTROLLERFAN_SPEED_MIN      0 // (0-255) Minimum speed. (If set below this value the fan is turned off.)
   #define CONTROLLERFAN_SPEED_ACTIVE 255 // (0-255) Active speed, used when any motor is enabled
-  #define CONTROLLERFAN_SPEED_IDLE     0 // (0-255) Idle speed, used when motors are disabled
+  #define CONTROLLERFAN_SPEED_IDLE     100 // (0-255) Idle speed, used when motors are disabled
   #define CONTROLLERFAN_IDLE_TIME     60 // (seconds) Extra time to keep the fan running after disabling motors
-  //#define CONTROLLER_FAN_EDITABLE      // Enable M710 configurable settings
+  #define CONTROLLER_FAN_EDITABLE      // Enable M710 configurable settings
   #if ENABLED(CONTROLLER_FAN_EDITABLE)
     #define CONTROLLER_FAN_MENU          // Enable the Controller Fan submenu
   #endif
@@ -388,7 +388,7 @@
 // When first starting the main fan, run it at full speed for the
 // given number of milliseconds.  This gets the fan spinning reliably
 // before setting a PWM value. (Does not work with software PWM for fan on Sanguinololu)
-//#define FAN_KICKSTART_TIME 100
+#define FAN_KICKSTART_TIME 100
 
 // Some coolers may require a non-zero "off" state.
 //#define FAN_OFF_PWM  1
@@ -406,7 +406,7 @@
  * Define one or both of these to override the default 0-255 range.
  */
 //#define FAN_MIN_PWM 50
-//#define FAN_MAX_PWM 128
+#define FAN_MAX_PWM 255
 
 /**
  * FAST PWM FAN Settings
@@ -449,7 +449,7 @@
  * Multiple extruders can be assigned to the same pin in which case
  * the fan will turn on when any selected extruder is above the threshold.
  */
-#define E0_AUTO_FAN_PIN -1
+#define E0_AUTO_FAN_PIN FAN1_PIN
 #define E1_AUTO_FAN_PIN -1
 #define E2_AUTO_FAN_PIN -1
 #define E3_AUTO_FAN_PIN -1
@@ -460,7 +460,7 @@
 #define CHAMBER_AUTO_FAN_PIN -1
 
 #define EXTRUDER_AUTO_FAN_TEMPERATURE 50
-#define EXTRUDER_AUTO_FAN_SPEED 255   // 255 == full speed
+#define EXTRUDER_AUTO_FAN_SPEED 200   // 255 == full speed
 #define CHAMBER_AUTO_FAN_TEMPERATURE 30
 #define CHAMBER_AUTO_FAN_SPEED 255
 
@@ -683,7 +683,7 @@
    * differs, a mode set eeprom write will be completed at initialization.
    * Use the option below to force an eeprom write to a V3.1 probe regardless.
    */
-  //#define BLTOUCH_SET_5V_MODE
+  #define BLTOUCH_SET_5V_MODE
 
   /**
    * Safety: Activate if connecting a probe with an unknown voltage mode.
@@ -1012,7 +1012,7 @@
 #if HAS_LCD_MENU
 
   // Include a page of printer information in the LCD Main Menu
-  //#define LCD_INFO_MENU
+  #define LCD_INFO_MENU
   #if ENABLED(LCD_INFO_MENU)
     //#define LCD_PRINTER_INFO_IS_BOOTSCREEN // Show bootscreen(s) instead of Printer Info pages
   #endif
@@ -1024,23 +1024,23 @@
    * LED Control Menu
    * Add LED Control to the LCD menu
    */
-  //#define LED_CONTROL_MENU
+  #define LED_CONTROL_MENU
   #if ENABLED(LED_CONTROL_MENU)
     #define LED_COLOR_PRESETS                 // Enable the Preset Color menu option
     #if ENABLED(LED_COLOR_PRESETS)
-      #define LED_USER_PRESET_RED        255  // User defined RED value
-      #define LED_USER_PRESET_GREEN      128  // User defined GREEN value
+      #define LED_USER_PRESET_RED        0 // User defined RED value
+      #define LED_USER_PRESET_GREEN      0  // User defined GREEN value
       #define LED_USER_PRESET_BLUE         0  // User defined BLUE value
       #define LED_USER_PRESET_WHITE      255  // User defined WHITE value
-      #define LED_USER_PRESET_BRIGHTNESS 255  // User defined intensity
-      //#define LED_USER_PRESET_STARTUP       // Have the printer display the user preset color on startup
+      #define LED_USER_PRESET_BRIGHTNESS 200  // User defined intensity
+      #define LED_USER_PRESET_STARTUP       // Have the printer display the user preset color on startup
     #endif
   #endif
 
 #endif // HAS_LCD_MENU
 
 // Scroll a longer status message into view
-//#define STATUS_MESSAGE_SCROLLING
+#define STATUS_MESSAGE_SCROLLING
 
 // On the Info Screen, display XY with one decimal place when possible
 //#define LCD_DECIMAL_SMALL_XY
@@ -1049,10 +1049,10 @@
 //#define LCD_TIMEOUT_TO_STATUS 15000
 
 // Add an 'M73' G-code to set the current percentage
-//#define LCD_SET_PROGRESS_MANUALLY
+#define LCD_SET_PROGRESS_MANUALLY
 
 // Show the E position (filament used) during printing
-//#define LCD_SHOW_E_TOTAL
+#define LCD_SHOW_E_TOTAL
 
 #if ENABLED(SHOW_BOOTSCREEN)
   #define BOOTSCREEN_TIMEOUT 4000        // (ms) Total Duration to display the boot screen(s)
@@ -1060,10 +1060,10 @@
 
 #if HAS_GRAPHICAL_LCD && EITHER(SDSUPPORT, LCD_SET_PROGRESS_MANUALLY)
   //#define PRINT_PROGRESS_SHOW_DECIMALS // Show progress with decimal digits
-  //#define SHOW_REMAINING_TIME          // Display estimated time to completion
+  #define SHOW_REMAINING_TIME          // Display estimated time to completion
   #if ENABLED(SHOW_REMAINING_TIME)
     //#define USE_M73_REMAINING_TIME     // Use remaining time from M73 command instead of estimation
-    //#define ROTATE_PROGRESS_DISPLAY    // Display (P)rogress, (E)lapsed, and (R)emaining time
+    #define ROTATE_PROGRESS_DISPLAY    // Display (P)rogress, (E)lapsed, and (R)emaining time
   #endif
 #endif
 
@@ -1082,7 +1082,7 @@
 
   // The standard SD detect circuit reads LOW when media is inserted and HIGH when empty.
   // Enable this option and set to HIGH if your SD cards are incorrectly detected.
-  //#define SD_DETECT_STATE HIGH
+  #define SD_DETECT_STATE HIGH
 
   //#define SDCARD_READONLY                 // Read-only SD card (to save over 2K of flash)
 
@@ -1171,7 +1171,7 @@
   //#define LONG_FILENAME_HOST_SUPPORT
 
   // Enable this option to scroll long filenames in the SD card menu
-  //#define SCROLL_LONG_FILENAMES
+  #define SCROLL_LONG_FILENAMES
 
   // Leave the heaters on after Stop Print (not recommended!)
   //#define SD_ABORT_NO_COOLDOWN
@@ -1255,7 +1255,7 @@
    *
    * :[ 'LCD', 'ONBOARD', 'CUSTOM_CABLE' ]
    */
-  //#define SDCARD_CONNECTION LCD
+  #define SDCARD_CONNECTION ONBOARD
 
 #endif // SDSUPPORT
 
@@ -1279,7 +1279,7 @@
  */
 #if HAS_GRAPHICAL_LCD
   // Show SD percentage next to the progress bar
-  //#define DOGM_SD_PERCENT
+  #define DOGM_SD_PERCENT
 
   // Save many cycles by drawing a hollow frame or no frame on the Info Screen
   //#define XYZ_NO_FRAME
@@ -1339,7 +1339,7 @@
   //#define STATUS_FAN_FRAMES 3       // :[0,1,2,3,4] Number of fan animation frames
   //#define STATUS_HEAT_PERCENT       // Show heating in a progress bar
   //#define BOOT_MARLIN_LOGO_SMALL    // Show a smaller Marlin logo on the Boot Screen (saving 399 bytes of flash)
-  //#define BOOT_MARLIN_LOGO_ANIMATED // Animated Marlin logo. Costs ~‭3260 (or ~940) bytes of PROGMEM.
+  #define BOOT_MARLIN_LOGO_ANIMATED // Animated Marlin logo. Costs ~‭3260 (or ~940) bytes of PROGMEM.
 
   // Frivolous Game Options
   //#define MARLIN_BRICKOUT
@@ -1519,21 +1519,21 @@
  *
  * Warning: Does not respect endstops!
  */
-//#define BABYSTEPPING
+#define BABYSTEPPING
 #if ENABLED(BABYSTEPPING)
   //#define INTEGRATED_BABYSTEPPING         // EXPERIMENTAL integration of babystepping into the Stepper ISR
   //#define BABYSTEP_WITHOUT_HOMING
   //#define BABYSTEP_XY                     // Also enable X/Y Babystepping. Not supported on DELTA!
   #define BABYSTEP_INVERT_Z false           // Change if Z babysteps should go the other way
-  #define BABYSTEP_MULTIPLICATOR_Z  1       // Babysteps are very small. Increase for faster motion.
+  #define BABYSTEP_MULTIPLICATOR_Z  7       // Babysteps are very small. Increase for faster motion.
   #define BABYSTEP_MULTIPLICATOR_XY 1
 
-  //#define DOUBLECLICK_FOR_Z_BABYSTEPPING  // Double-click on the Status Screen for Z Babystepping.
+  #define DOUBLECLICK_FOR_Z_BABYSTEPPING  // Double-click on the Status Screen for Z Babystepping.
   #if ENABLED(DOUBLECLICK_FOR_Z_BABYSTEPPING)
     #define DOUBLECLICK_MAX_INTERVAL 1250   // Maximum interval between clicks, in milliseconds.
                                             // Note: Extra time may be added to mitigate controller latency.
     //#define BABYSTEP_ALWAYS_AVAILABLE     // Allow babystepping at all times (not just during movement).
-    //#define MOVE_Z_WHEN_IDLE              // Jump to the move Z menu on doubleclick when printer is idle.
+    #define MOVE_Z_WHEN_IDLE              // Jump to the move Z menu on doubleclick when printer is idle.
     #if ENABLED(MOVE_Z_WHEN_IDLE)
       #define MOVE_Z_IDLE_MULTIPLICATOR 1   // Multiply 1mm by this factor for the move step size.
     #endif
@@ -1541,10 +1541,10 @@
 
   //#define BABYSTEP_DISPLAY_TOTAL          // Display total babysteps since last G28
 
-  //#define BABYSTEP_ZPROBE_OFFSET          // Combine M851 Z and Babystepping
+  #define BABYSTEP_ZPROBE_OFFSET          // Combine M851 Z and Babystepping
   #if ENABLED(BABYSTEP_ZPROBE_OFFSET)
     //#define BABYSTEP_HOTEND_Z_OFFSET      // For multiple hotends, babystep relative Z offsets
-    //#define BABYSTEP_ZPROBE_GFX_OVERLAY   // Enable graphical overlay on Z-offset editor
+    #define BABYSTEP_ZPROBE_GFX_OVERLAY   // Enable graphical overlay on Z-offset editor
   #endif
 #endif
 
@@ -1565,12 +1565,12 @@
  *
  * See https://marlinfw.org/docs/features/lin_advance.html for full instructions.
  */
-//#define LIN_ADVANCE
+#define LIN_ADVANCE
 #if ENABLED(LIN_ADVANCE)
   //#define EXTRA_LIN_ADVANCE_K // Enable for second linear advance constants
   #define LIN_ADVANCE_K 0.22    // Unit: mm compression per 1mm/s extruder speed
   //#define LA_DEBUG            // If enabled, this will generate debug information output over USB.
-  //#define EXPERIMENTAL_SCURVE // Enable this option to permit S-Curve Acceleration
+  #define EXPERIMENTAL_SCURVE // Enable this option to permit S-Curve Acceleration
 #endif
 
 // @section leveling
@@ -1999,7 +1999,7 @@
  * Requires NOZZLE_PARK_FEATURE.
  * This feature is required for the default FILAMENT_RUNOUT_SCRIPT.
  */
-//#define ADVANCED_PAUSE_FEATURE
+#define ADVANCED_PAUSE_FEATURE
 #if ENABLED(ADVANCED_PAUSE_FEATURE)
   #define PAUSE_PARK_RETRACT_FEEDRATE         60  // (mm/s) Initial retract feedrate.
   #define PAUSE_PARK_RETRACT_LENGTH            2  // (mm) Initial retract.
@@ -2369,7 +2369,7 @@
    */
   #define STEALTHCHOP_XY
   #define STEALTHCHOP_Z
-  #define STEALTHCHOP_E
+  //#define STEALTHCHOP_E
 
   /**
    * Optimize spreadCycle chopper parameters by using predefined parameter sets
@@ -2385,7 +2385,7 @@
    * Define you own with
    * { <off_time[1..15]>, <hysteresis_end[-3..12]>, hysteresis_start[1..8] }
    */
-  #define CHOPPER_TIMING CHOPPER_DEFAULT_12V
+  #define CHOPPER_TIMING CHOPPER_DEFAULT_24V
 
   /**
    * Monitor Trinamic drivers
@@ -2487,13 +2487,13 @@
    * Beta feature!
    * Create a 50/50 square wave step pulse optimal for stepper drivers.
    */
-  //#define SQUARE_WAVE_STEPPING
+  #define SQUARE_WAVE_STEPPING
 
   /**
    * Enable M122 debugging command for TMC stepper drivers.
    * M122 S0/1 will enable continous reporting.
    */
-  //#define TMC_DEBUG
+  #define TMC_DEBUG
 
   /**
    * You can set your own advanced settings by filling in predefined functions.
@@ -3072,7 +3072,7 @@
   //#define GCODE_QUOTED_STRINGS  // Support for quoted string parameters
 #endif
 
-//#define GCODE_CASE_INSENSITIVE  // Accept G-code sent to the firmware in lowercase
+#define GCODE_CASE_INSENSITIVE  // Accept G-code sent to the firmware in lowercase
 
 //#define REPETIER_GCODE_M360     // Add commands originally from Repetier FW
 
@@ -3113,9 +3113,9 @@
 /**
  * User-defined menu items that execute custom GCode
  */
-//#define CUSTOM_USER_MENUS
+#define CUSTOM_USER_MENUS
 #if ENABLED(CUSTOM_USER_MENUS)
-  //#define CUSTOM_USER_MENU_TITLE "Custom Commands"
+  #define CUSTOM_USER_MENU_TITLE "Custom Commands"
   #define USER_SCRIPT_DONE "M117 User Script Done"
   #define USER_SCRIPT_AUDIBLE_FEEDBACK
   //#define USER_SCRIPT_RETURN  // Return to status screen after a script
@@ -3134,6 +3134,9 @@
 
   #define USER_DESC_5 "Home & Info"
   #define USER_GCODE_5 "G28\nM503"
+  
+   #define USER_DESC_6 "Reset"
+  #define USER_GCODE_6 "M997"	
 #endif
 
 /**
