@@ -36,7 +36,7 @@
   // 128 kB sector allocated for EEPROM emulation.
   #define FLASH_EEPROM_LEVELING
 #endif
-
+#define I2C_EEPROM 
 //
 // Servos
 //
@@ -228,7 +228,11 @@
 //
 // Misc. Functions
 //
-
+// Filament Runout Sensor
+//
+#ifndef FIL_RUNOUT_PIN
+  #define FIL_RUNOUT_PIN  PB10
+#endif  
 #ifndef SDCARD_CONNECTION
   #define SDCARD_CONNECTION                  LCD
 #endif
