@@ -211,7 +211,14 @@
 //
 // LCDs and Controllers
 //
-#define SD_DETECT_PIN                         49
+#define SD_DETECT_PIN                        49
+#define BEEPER_PIN                           37
+#define LCD_PINS_RS                          16
+#define LCD_PINS_ENABLE                      17
+#define LCD_PINS_D4                          23
+#define LCD_PINS_D5                          25
+#define LCD_PINS_D6                          27
+#define LCD_PINS_D7                          29
 
 #if ENABLED(FYSETC_242_OLED_12864)
   #define BTN_EN1                             37
