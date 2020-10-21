@@ -21,37 +21,19 @@
  */
 #pragma once
 
-#include "../../lcd/marlinui.h"
+#ifdef __IMXRT1062__
+  #include <NativeEthernet.h>
+#endif
 
-class Password {
-public:
-  static bool is_set, is_locked;
-  static uint32_t value, value_entry;
+// Teensy 4.1 uses internal MAC Address
 
-  Password() { is_locked = false; }
-
-  static void lock_machine();
-
-  #if HAS_LCD_MENU
-    static void access_menu_password();
-    static void authentication_check();
-    static void authentication_done();
-    static void media_gatekeeper();
-
-    private:
-    static void authenticate_user(const screenFunc_t, const screenFunc_t);
-    static void menu_password();
-    static void menu_password_entry();
-    static void screen_password_entry();
-    static void screen_set_password();
-    static void start_over();
-
-    static void digit_entered();
-    static void set_password_done();
-    static void menu_password_report();
-
-    static void remove_password();
-  #endif
+class MarlinEthernet {
+  public:
+    static bool hardware_enabled, have_telnet_client;
+    static IPAddress ip, myDns, gateway, subnet;
+    static EthernetClient telnetClient;
+    static void init();
+    static void check();
 };
 
-extern Password password;
+extern MarlinEthernet ethernet;
