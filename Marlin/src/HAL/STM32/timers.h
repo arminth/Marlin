@@ -28,7 +28,7 @@
 // Defines
 // ------------------------
 /////
-#ifdef STM32F0xx
+/* #ifdef STM32F0xx
   #define MCU_TIMER_RATE (F_CPU)      // Frequency of timer peripherals
   #define MCU_STEP_TIMER 16
   #define MCU_TEMP_TIMER 17
@@ -48,7 +48,7 @@
 
 #ifndef HAL_TIMER_RATE
   #define HAL_TIMER_RATE MCU_TIMER_RATE
-#endif
+#endif */
 
 //////
 #define FORCE_INLINE __attribute__((always_inline)) inline
