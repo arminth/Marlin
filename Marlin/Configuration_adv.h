@@ -16,7 +16,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 #pragma once
@@ -33,7 +33,7 @@
 #define CONFIGURATION_ADV_H_VERSION 020008
 
 //===========================================================================
-//============================= Thermal Settings ============================
+//=============================Thermal Settings  ============================
 //===========================================================================
 // @section temperature
 
@@ -163,7 +163,7 @@
 
   //#define CHAMBER_FAN               // Enable a fan on the chamber
   #if ENABLED(CHAMBER_FAN)
-    #define CHAMBER_FAN_MODE 2        // Fan control mode: 0=Static; 1=Linear increase when temp is higher than target; 2=V-shaped curve; 3=similar to 1 but fan is always on.
+    #define CHAMBER_FAN_MODE 2        // Fan control mode: 0=Static; 1=Linear increase when temp is higher than target; 2=V-shaped curve.
     #if CHAMBER_FAN_MODE == 0
       #define CHAMBER_FAN_BASE  255   // Chamber fan PWM (0-255)
     #elif CHAMBER_FAN_MODE == 1
@@ -172,9 +172,6 @@
     #elif CHAMBER_FAN_MODE == 2
       #define CHAMBER_FAN_BASE  128   // Minimum chamber fan PWM (0-255)
       #define CHAMBER_FAN_FACTOR 25   // PWM increase per °C difference from target
-    #elif CHAMBER_FAN_MODE == 3
-      #define CHAMBER_FAN_BASE  128   // Base chamber fan PWM (0-255)
-      #define CHAMBER_FAN_FACTOR 25   // PWM increase per °C above target
     #endif
   #endif
 
@@ -204,20 +201,6 @@
   #if ENABLED(COOLER_FAN)
     #define COOLER_FAN_BASE      100  // Base Cooler fan PWM (0-255); turns on when Cooler temperature is above the target
     #define COOLER_FAN_FACTOR     25  // PWM increase per °C above target
-  #endif
-#endif
-
-//
-// Laser Coolant Flow Meter
-//
-//#define LASER_COOLANT_FLOW_METER
-#if ENABLED(LASER_COOLANT_FLOW_METER)
-  #define FLOWMETER_PIN         20  // Requires an external interrupt-enabled pin (e.g., RAMPS 2,3,18,19,20,21)
-  #define FLOWMETER_PPL       5880  // (pulses/liter) Flow meter pulses-per-liter on the input pin
-  #define FLOWMETER_INTERVAL  1000  // (ms) Flow rate calculation interval in milliseconds
-  #define FLOWMETER_SAFETY          // Prevent running the laser without the minimum flow rate set below
-  #if ENABLED(FLOWMETER_SAFETY)
-    #define FLOWMETER_MIN_LITERS_PER_MINUTE 1.5 // (liters/min) Minimum flow required when enabled
   #endif
 #endif
 
@@ -461,16 +444,15 @@
  * The fan turns on automatically whenever any driver is enabled and turns
  * off (or reduces to idle speed) shortly after drivers are turned off.
  */
-//#define USE_CONTROLLER_FAN
+#define USE_CONTROLLER_FAN
 #if ENABLED(USE_CONTROLLER_FAN)
-  //#define CONTROLLER_FAN_PIN -1        // Set a custom pin for the controller fan
+  #define CONTROLLER_FAN_PIN P1_00        // Set a custom pin for the controller fan
   //#define CONTROLLER_FAN_USE_Z_ONLY    // With this option only the Z axis is considered
-  //#define CONTROLLER_FAN_IGNORE_Z      // Ignore Z stepper. Useful when stepper timeout is disabled.
   #define CONTROLLERFAN_SPEED_MIN      0 // (0-255) Minimum speed. (If set below this value the fan is turned off.)
   #define CONTROLLERFAN_SPEED_ACTIVE 255 // (0-255) Active speed, used when any motor is enabled
-  #define CONTROLLERFAN_SPEED_IDLE     0 // (0-255) Idle speed, used when motors are disabled
+  #define CONTROLLERFAN_SPEED_IDLE     100 // (0-255) Idle speed, used when motors are disabled
   #define CONTROLLERFAN_IDLE_TIME     60 // (seconds) Extra time to keep the fan running after disabling motors
-  //#define CONTROLLER_FAN_EDITABLE      // Enable M710 configurable settings
+  #define CONTROLLER_FAN_EDITABLE      // Enable M710 configurable settings
   #if ENABLED(CONTROLLER_FAN_EDITABLE)
     #define CONTROLLER_FAN_MENU          // Enable the Controller Fan submenu
   #endif
@@ -479,7 +461,7 @@
 // When first starting the main fan, run it at full speed for the
 // given number of milliseconds.  This gets the fan spinning reliably
 // before setting a PWM value. (Does not work with software PWM for fan on Sanguinololu)
-//#define FAN_KICKSTART_TIME 100
+#define FAN_KICKSTART_TIME 100
 
 // Some coolers may require a non-zero "off" state.
 //#define FAN_OFF_PWM  1
@@ -497,7 +479,7 @@
  * Define one or both of these to override the default 0-255 range.
  */
 //#define FAN_MIN_PWM 50
-//#define FAN_MAX_PWM 128
+#define FAN_MAX_PWM 255
 
 /**
  * FAST PWM FAN Settings
@@ -540,7 +522,7 @@
  * Multiple extruders can be assigned to the same pin in which case
  * the fan will turn on when any selected extruder is above the threshold.
  */
-#define E0_AUTO_FAN_PIN -1
+#define E0_AUTO_FAN_PIN FAN1_PIN
 #define E1_AUTO_FAN_PIN -1
 #define E2_AUTO_FAN_PIN -1
 #define E3_AUTO_FAN_PIN -1
@@ -553,7 +535,7 @@
 #define COOLER_FAN_PIN -1
 
 #define EXTRUDER_AUTO_FAN_TEMPERATURE 50
-#define EXTRUDER_AUTO_FAN_SPEED 255   // 255 == full speed
+#define EXTRUDER_AUTO_FAN_SPEED 220   // 255 == full speed
 #define CHAMBER_AUTO_FAN_TEMPERATURE 30
 #define CHAMBER_AUTO_FAN_SPEED 255
 #define COOLER_AUTO_FAN_TEMPERATURE 18
@@ -734,14 +716,14 @@
  * the position of the toolhead relative to the workspace.
  */
 
-//#define SENSORLESS_BACKOFF_MM  { 2, 2 }     // (mm) Backoff from endstops before sensorless homing
+#define SENSORLESS_BACKOFF_MM  { 2, 2 }     // (mm) Backoff from endstops before sensorless homing
 
-#define HOMING_BUMP_MM      { 5, 5, 2 }       // (mm) Backoff from endstops after first bump
+#define HOMING_BUMP_MM      { 0, 0, 2 }       // (mm) Backoff from endstops after first bump
 #define HOMING_BUMP_DIVISOR { 2, 2, 4 }       // Re-Bump Speed Divisor (Divides the Homing Feedrate)
 
-//#define HOMING_BACKOFF_POST_MM { 2, 2, 2 }  // (mm) Backoff from endstops after homing
+#define HOMING_BACKOFF_POST_MM { 2, 2, 0 }  // (mm) Backoff from endstops after homing
 
-//#define QUICK_HOME                          // If G28 contains XY do a diagonal move first
+#define QUICK_HOME                          // If G28 contains XY do a diagonal move first
 //#define HOME_Y_BEFORE_X                     // If G28 contains XY home Y before X
 //#define HOME_Z_FIRST                        // Home Z first. Requires a Z-MIN endstop (not a probe).
 //#define CODEPENDENT_XY_HOMING               // If X/Y can't home without homing Y/X first
@@ -754,8 +736,8 @@
    * Do not activate settings that the probe might not understand. Clones might misunderstand
    * advanced commands.
    *
-   * Note: If the probe is not deploying, do a "Reset" and "Self-Test" and then check the
-   *       wiring of the BROWN, RED and ORANGE wires.
+   * Note: If the probe is not deploying, check a "Cmd: Reset" and "Cmd: Self-Test" and then
+   *       check the wiring of the BROWN, RED and ORANGE wires.
    *
    * Note: If the trigger signal of your probe is not being recognized, it has been very often
    *       because the BLACK and WHITE wires needed to be swapped. They are not "interchangeable"
@@ -788,7 +770,7 @@
    * Danger: Don't activate 5V mode unless attached to a 5V-tolerant controller!
    * V3.0 or 3.1: Set default mode to 5V mode at Marlin startup.
    * If disabled, OD mode is the hard-coded default on 3.0
-   * On startup, Marlin will compare its eeprom to this value. If the selected mode
+   * On startup, Marlin will compare its eeprom to this vale. If the selected mode
    * differs, a mode set eeprom write will be completed at initialization.
    * Use the option below to force an eeprom write to a V3.1 probe regardless.
    */
@@ -948,7 +930,7 @@
 /**
  * XY Frequency limit
  * Reduce resonance by limiting the frequency of small zigzag infill moves.
- * See https://hydraraptor.blogspot.com/2010/12/frequency-limit.html
+ * See http://hydraraptor.blogspot.com/2010/12/frequency-limit.html
  * Use M201 F<freq> G<min%> to change limits at runtime.
  */
 //#define XY_FREQUENCY_LIMIT      10 // (Hz) Maximum frequency of small zigzag infill moves. Set with M201 F<hertz>.
@@ -1013,9 +995,6 @@
 //#define CALIBRATION_GCODE
 #if ENABLED(CALIBRATION_GCODE)
 
-  //#define CALIBRATION_SCRIPT_PRE  "M117 Starting Auto-Calibration\nT0\nG28\nG12\nM117 Calibrating..."
-  //#define CALIBRATION_SCRIPT_POST "M500\nM117 Calibration data saved"
-
   #define CALIBRATION_MEASUREMENT_RESOLUTION     0.01 // mm
 
   #define CALIBRATION_FEEDRATE_SLOW             60    // mm/min
@@ -1072,7 +1051,7 @@
 //#define MICROSTEP16 LOW,LOW,HIGH
 //#define MICROSTEP32 HIGH,LOW,HIGH
 
-// Microstep settings (Requires a board with pins named X_MS1, X_MS2, etc.)
+// Microstep setting (Only functional when stepper driver microstep pins are connected to MCU.
 #define MICROSTEP_MODES { 16, 16, 16, 16, 16, 16 } // [1,2,4,8,16]
 
 /**
@@ -1160,7 +1139,7 @@
 
   // Add Probe Z Offset calibration to the Z Probe Offsets menu
   #if HAS_BED_PROBE
-    //#define PROBE_OFFSET_WIZARD
+    #define PROBE_OFFSET_WIZARD
     #if ENABLED(PROBE_OFFSET_WIZARD)
       //
       // Enable to init the Probe Z-Offset when starting the Wizard.
@@ -1175,7 +1154,7 @@
   #endif
 
   // Include a page of printer information in the LCD Main Menu
-  //#define LCD_INFO_MENU
+  #define LCD_INFO_MENU
   #if ENABLED(LCD_INFO_MENU)
     //#define LCD_PRINTER_INFO_IS_BOOTSCREEN // Show bootscreen(s) instead of Printer Info pages
   #endif
@@ -1190,17 +1169,17 @@
    * LED Control Menu
    * Add LED Control to the LCD menu
    */
-  //#define LED_CONTROL_MENU
+  #define LED_CONTROL_MENU
   #if ENABLED(LED_CONTROL_MENU)
     #define LED_COLOR_PRESETS                 // Enable the Preset Color menu option
     //#define NEO2_COLOR_PRESETS              // Enable a second NeoPixel Preset Color menu option
     #if ENABLED(LED_COLOR_PRESETS)
-      #define LED_USER_PRESET_RED        255  // User defined RED value
-      #define LED_USER_PRESET_GREEN      128  // User defined GREEN value
+      #define LED_USER_PRESET_RED        0 // User defined RED value
+      #define LED_USER_PRESET_GREEN      0  // User defined GREEN value
       #define LED_USER_PRESET_BLUE         0  // User defined BLUE value
       #define LED_USER_PRESET_WHITE      255  // User defined WHITE value
-      #define LED_USER_PRESET_BRIGHTNESS 255  // User defined intensity
-      //#define LED_USER_PRESET_STARTUP       // Have the printer display the user preset color on startup
+      #define LED_USER_PRESET_BRIGHTNESS 200  // User defined intensity
+      #define LED_USER_PRESET_STARTUP       // Have the printer display the user preset color on startup
     #endif
     #if ENABLED(NEO2_COLOR_PRESETS)
       #define NEO2_USER_PRESET_RED        255  // User defined RED value
@@ -1229,16 +1208,16 @@
   #endif
 
   // Scroll a longer status message into view
-  //#define STATUS_MESSAGE_SCROLLING
+  #define STATUS_MESSAGE_SCROLLING
 
   // On the Info Screen, display XY with one decimal place when possible
   //#define LCD_DECIMAL_SMALL_XY
 
   // Add an 'M73' G-code to set the current percentage
-  //#define LCD_SET_PROGRESS_MANUALLY
+  #define LCD_SET_PROGRESS_MANUALLY
 
   // Show the E position (filament used) during printing
-  //#define LCD_SHOW_E_TOTAL
+  #define LCD_SHOW_E_TOTAL
 #endif
 
 #if EITHER(SDSUPPORT, LCD_SET_PROGRESS_MANUALLY) && ANY(HAS_MARLINUI_U8GLIB, HAS_MARLINUI_HD44780, IS_TFTGLCD_PANEL, EXTENSIBLE_UI)
@@ -1278,7 +1257,7 @@
 
   // The standard SD detect circuit reads LOW when media is inserted and HIGH when empty.
   // Enable this option and set to HIGH if your SD cards are incorrectly detected.
-  //#define SD_DETECT_STATE HIGH
+  #define SD_DETECT_STATE HIGH
 
   //#define SD_IGNORE_AT_STARTUP            // Don't mount the SD card when starting up
   //#define SDCARD_READONLY                 // Read-only SD card (to save over 2K of flash)
@@ -1367,7 +1346,7 @@
   #if ENABLED(SDCARD_SORT_ALPHA)
     #define SDSORT_LIMIT       40     // Maximum number of sorted items (10-256). Costs 27 bytes each.
     #define FOLDER_SORTING     -1     // -1=above  0=none  1=below
-    #define SDSORT_GCODE       false  // Allow turning sorting on/off with LCD and M34 G-code.
+    #define SDSORT_GCODE       false  // Allow turning sorting on/off with LCD and M34 g-code.
     #define SDSORT_USES_RAM    false  // Pre-allocate a static array for faster pre-sorting.
     #define SDSORT_USES_STACK  false  // Prefer the stack for pre-sorting to give back some SRAM. (Negated by next 2 options.)
     #define SDSORT_CACHE_NAMES false  // Keep sorted items in RAM longer for speedy performance. Most expensive option.
@@ -1384,7 +1363,7 @@
   //#define LONG_FILENAME_HOST_SUPPORT
 
   // Enable this option to scroll long filenames in the SD card menu
-  //#define SCROLL_LONG_FILENAMES
+  #define SCROLL_LONG_FILENAMES
 
   // Leave the heaters on after Stop Print (not recommended!)
   //#define SD_ABORT_NO_COOLDOWN
@@ -1476,19 +1455,10 @@
    *
    * :[ 'LCD', 'ONBOARD', 'CUSTOM_CABLE' ]
    */
-  //#define SDCARD_CONNECTION LCD
+  #define SDCARD_CONNECTION ONBOARD
 
   // Enable if SD detect is rendered useless (e.g., by using an SD extender)
   //#define NO_SD_DETECT
-
-  // Multiple volume support - EXPERIMENTAL.
-  //#define MULTI_VOLUME
-  #if ENABLED(MULTI_VOLUME)
-    #define VOLUME_SD_ONBOARD
-    #define VOLUME_USB_FLASH_DRIVE
-    #define DEFAULT_VOLUME SD_ONBOARD
-    #define DEFAULT_SHARED_VOLUME USB_FLASH_DRIVE
-  #endif
 
 #endif // SDSUPPORT
 
@@ -1512,7 +1482,7 @@
  */
 #if HAS_MARLINUI_U8GLIB
   // Show SD percentage next to the progress bar
-  //#define DOGM_SD_PERCENT
+  #define DOGM_SD_PERCENT
 
   // Save many cycles by drawing a hollow frame or no frame on the Info Screen
   //#define XYZ_NO_FRAME
@@ -1568,12 +1538,12 @@
   #define STATUS_CHAMBER_ANIM         // Use a second bitmap to indicate chamber heating
   //#define STATUS_CUTTER_ANIM        // Use a second bitmap to indicate spindle / laser active
   //#define STATUS_COOLER_ANIM        // Use a second bitmap to indicate laser cooling
-  //#define STATUS_FLOWMETER_ANIM     // Use multiple bitmaps to indicate coolant flow
   //#define STATUS_ALT_BED_BITMAP     // Use the alternative bed bitmap
   //#define STATUS_ALT_FAN_BITMAP     // Use the alternative fan bitmap
   //#define STATUS_FAN_FRAMES 3       // :[0,1,2,3,4] Number of fan animation frames
   //#define STATUS_HEAT_PERCENT       // Show heating in a progress bar
-  //#define BOOT_MARLIN_LOGO_ANIMATED // Animated Marlin logo. Costs ~‭3260 (or ~940) bytes of PROGMEM.
+  //#define BOOT_MARLIN_LOGO_SMALL    // Show a smaller Marlin logo on the Boot Screen (saving 399 bytes of flash)
+  #define BOOT_MARLIN_LOGO_ANIMATED // Animated Marlin logo. Costs ~‭3260 (or ~940) bytes of PROGMEM.
 
   // Frivolous Game Options
   //#define MARLIN_BRICKOUT
@@ -1682,7 +1652,6 @@
   //#define AO_EXP2_PINMAP      // AlephObjects CLCD UI EXP2 mapping
   //#define CR10_TFT_PINMAP     // Rudolph Riedel's CR10 pin mapping
   //#define S6_TFT_PINMAP       // FYSETC S6 pin mapping
-  //#define F6_TFT_PINMAP       // FYSETC F6 pin mapping
 
   //#define OTHER_PIN_LAYOUT  // Define pins manually below
   #if ENABLED(OTHER_PIN_LAYOUT)
@@ -1762,7 +1731,7 @@
 // ADC Button Debounce
 //
 #if HAS_ADC_BUTTONS
-  #define ADC_BUTTON_DEBOUNCE_DELAY 16  // Increase if buttons bounce or repeat too fast
+  #define ADC_BUTTON_DEBOUNCE_DELAY 16  // (ms) Increase if buttons bounce or repeat too fast
 #endif
 
 // @section safety
@@ -1790,22 +1759,22 @@
  *
  * Warning: Does not respect endstops!
  */
-//#define BABYSTEPPING
+#define BABYSTEPPING
 #if ENABLED(BABYSTEPPING)
   //#define INTEGRATED_BABYSTEPPING         // EXPERIMENTAL integration of babystepping into the Stepper ISR
   //#define BABYSTEP_WITHOUT_HOMING
   //#define BABYSTEP_ALWAYS_AVAILABLE       // Allow babystepping at all times (not just during movement).
   //#define BABYSTEP_XY                     // Also enable X/Y Babystepping. Not supported on DELTA!
   #define BABYSTEP_INVERT_Z false           // Change if Z babysteps should go the other way
-  //#define BABYSTEP_MILLIMETER_UNITS       // Specify BABYSTEP_MULTIPLICATOR_(XY|Z) in mm instead of micro-steps
-  #define BABYSTEP_MULTIPLICATOR_Z  1       // (steps or mm) Steps or millimeter distance for each Z babystep
-  #define BABYSTEP_MULTIPLICATOR_XY 1       // (steps or mm) Steps or millimeter distance for each XY babystep
+  #define BABYSTEP_MULTIPLICATOR_Z  7       // Babysteps are very small. Increase for faster motion.
+  #define BABYSTEP_MULTIPLICATOR_XY 1
 
-  //#define DOUBLECLICK_FOR_Z_BABYSTEPPING  // Double-click on the Status Screen for Z Babystepping.
+  #define DOUBLECLICK_FOR_Z_BABYSTEPPING  // Double-click on the Status Screen for Z Babystepping.
   #if ENABLED(DOUBLECLICK_FOR_Z_BABYSTEPPING)
     #define DOUBLECLICK_MAX_INTERVAL 1250   // Maximum interval between clicks, in milliseconds.
                                             // Note: Extra time may be added to mitigate controller latency.
-    //#define MOVE_Z_WHEN_IDLE              // Jump to the move Z menu on doubleclick when printer is idle.
+    //#define BABYSTEP_ALWAYS_AVAILABLE     // Allow babystepping at all times (not just during movement).
+    #define MOVE_Z_WHEN_IDLE              // Jump to the move Z menu on doubleclick when printer is idle.
     #if ENABLED(MOVE_Z_WHEN_IDLE)
       #define MOVE_Z_IDLE_MULTIPLICATOR 1   // Multiply 1mm by this factor for the move step size.
     #endif
@@ -1813,10 +1782,10 @@
 
   //#define BABYSTEP_DISPLAY_TOTAL          // Display total babysteps since last G28
 
-  //#define BABYSTEP_ZPROBE_OFFSET          // Combine M851 Z and Babystepping
+  #define BABYSTEP_ZPROBE_OFFSET          // Combine M851 Z and Babystepping
   #if ENABLED(BABYSTEP_ZPROBE_OFFSET)
     //#define BABYSTEP_HOTEND_Z_OFFSET      // For multiple hotends, babystep relative Z offsets
-    //#define BABYSTEP_ZPROBE_GFX_OVERLAY   // Enable graphical overlay on Z-offset editor
+    #define BABYSTEP_ZPROBE_GFX_OVERLAY   // Enable graphical overlay on Z-offset editor
   #endif
 #endif
 
@@ -1837,12 +1806,12 @@
  *
  * See https://marlinfw.org/docs/features/lin_advance.html for full instructions.
  */
-//#define LIN_ADVANCE
+#define LIN_ADVANCE
 #if ENABLED(LIN_ADVANCE)
   //#define EXTRA_LIN_ADVANCE_K // Enable for second linear advance constants
   #define LIN_ADVANCE_K 0.22    // Unit: mm compression per 1mm/s extruder speed
   //#define LA_DEBUG            // If enabled, this will generate debug information output over USB.
-  //#define EXPERIMENTAL_SCURVE // Enable this option to permit S-Curve Acceleration
+  #define EXPERIMENTAL_SCURVE // Enable this option to permit S-Curve Acceleration
 #endif
 
 // @section leveling
@@ -2077,7 +2046,7 @@
 
 // @section motion
 
-// The number of linear moves that can be in the planner at once.
+// The number of lineear moves that can be in the planner at once.
 // The value of BLOCK_BUFFER_SIZE must be a power of 2 (e.g. 8, 16, 32)
 #if BOTH(SDSUPPORT, DIRECT_STEPPING)
   #define BLOCK_BUFFER_SIZE  8
@@ -2176,9 +2145,6 @@
 // This option inserts short delays between lines of serial output.
 #define SERIAL_OVERRUN_PROTECTION
 
-// For serial echo, the number of digits after the decimal point
-//#define SERIAL_FLOAT_PRECISION 4
-
 // @section extras
 
 /**
@@ -2236,12 +2202,6 @@
   #if ENABLED(TOOLCHANGE_NO_RETURN)
     //#define EVENT_GCODE_AFTER_TOOLCHANGE "G12X"   // Extra G-code to run after tool-change
   #endif
-
-  /**
-   * Tool Sensors detect when tools have been picked up or dropped.
-   * Requires the pins TOOL_SENSOR1_PIN, TOOL_SENSOR2_PIN, etc.
-   */
-  //#define TOOL_SENSOR
 
   /**
    * Retract and prime filament on tool-change to reduce
@@ -2310,7 +2270,7 @@
  * Requires NOZZLE_PARK_FEATURE.
  * This feature is required for the default FILAMENT_RUNOUT_SCRIPT.
  */
-//#define ADVANCED_PAUSE_FEATURE
+#define ADVANCED_PAUSE_FEATURE
 #if ENABLED(ADVANCED_PAUSE_FEATURE)
   #define PAUSE_PARK_RETRACT_FEEDRATE         60  // (mm/s) Initial retract feedrate.
   #define PAUSE_PARK_RETRACT_LENGTH            2  // (mm) Initial retract.
@@ -2351,7 +2311,7 @@
   //#define PARK_HEAD_ON_PAUSE                    // Park the nozzle during pause and filament change.
   //#define HOME_BEFORE_FILAMENT_CHANGE           // If needed, home before parking for filament change
 
-  //#define FILAMENT_LOAD_UNLOAD_GCODES           // Add M701/M702 Load/Unload G-codes, plus Load/Unload in the LCD Prepare menu.
+  #define FILAMENT_LOAD_UNLOAD_GCODES           // Add M701/M702 Load/Unload G-codes, plus Load/Unload in the LCD Prepare menu.
   //#define FILAMENT_UNLOAD_ALL_EXTRUDERS         // Allow M702 to unload all extruders above a minimum target temp (as set by M302)
 #endif
 
@@ -2492,7 +2452,7 @@
   #define INTERPOLATE      true
 
   #if AXIS_IS_TMC(X)
-    #define X_CURRENT       800        // (mA) RMS current. Multiply by 1.414 for peak current.
+    #define X_CURRENT       700        // (mA) RMS current. Multiply by 1.414 for peak current.
     #define X_CURRENT_HOME  X_CURRENT  // (mA) RMS current for sensorless homing
     #define X_MICROSTEPS     16        // 0..256
     #define X_RSENSE          0.11
@@ -2501,7 +2461,7 @@
   #endif
 
   #if AXIS_IS_TMC(X2)
-    #define X2_CURRENT      800
+    #define X2_CURRENT      700
     #define X2_CURRENT_HOME X2_CURRENT
     #define X2_MICROSTEPS    X_MICROSTEPS
     #define X2_RSENSE         0.11
@@ -2510,7 +2470,7 @@
   #endif
 
   #if AXIS_IS_TMC(Y)
-    #define Y_CURRENT       800
+    #define Y_CURRENT       900
     #define Y_CURRENT_HOME  Y_CURRENT
     #define Y_MICROSTEPS     16
     #define Y_RSENSE          0.11
@@ -2528,7 +2488,7 @@
   #endif
 
   #if AXIS_IS_TMC(Z)
-    #define Z_CURRENT       800
+    #define Z_CURRENT       700
     #define Z_CURRENT_HOME  Z_CURRENT
     #define Z_MICROSTEPS     16
     #define Z_RSENSE          0.11
@@ -2564,7 +2524,7 @@
   #endif
 
   #if AXIS_IS_TMC(E0)
-    #define E0_CURRENT      800
+    #define E0_CURRENT      750
     #define E0_MICROSTEPS    16
     #define E0_RSENSE         0.11
     #define E0_CHAIN_POS     -1
@@ -2573,7 +2533,7 @@
 
   #if AXIS_IS_TMC(E1)
     #define E1_CURRENT      800
-    #define E1_MICROSTEPS   E0_MICROSTEPS
+    #define E1_MICROSTEPS    E0_MICROSTEPS
     #define E1_RSENSE         0.11
     #define E1_CHAIN_POS     -1
     //#define E1_INTERPOLATE true
@@ -2581,7 +2541,7 @@
 
   #if AXIS_IS_TMC(E2)
     #define E2_CURRENT      800
-    #define E2_MICROSTEPS   E0_MICROSTEPS
+    #define E2_MICROSTEPS    E0_MICROSTEPS
     #define E2_RSENSE         0.11
     #define E2_CHAIN_POS     -1
     //#define E2_INTERPOLATE true
@@ -2589,7 +2549,7 @@
 
   #if AXIS_IS_TMC(E3)
     #define E3_CURRENT      800
-    #define E3_MICROSTEPS   E0_MICROSTEPS
+    #define E3_MICROSTEPS    E0_MICROSTEPS
     #define E3_RSENSE         0.11
     #define E3_CHAIN_POS     -1
     //#define E3_INTERPOLATE true
@@ -2597,7 +2557,7 @@
 
   #if AXIS_IS_TMC(E4)
     #define E4_CURRENT      800
-    #define E4_MICROSTEPS   E0_MICROSTEPS
+    #define E4_MICROSTEPS    E0_MICROSTEPS
     #define E4_RSENSE         0.11
     #define E4_CHAIN_POS     -1
     //#define E4_INTERPOLATE true
@@ -2605,7 +2565,7 @@
 
   #if AXIS_IS_TMC(E5)
     #define E5_CURRENT      800
-    #define E5_MICROSTEPS   E0_MICROSTEPS
+    #define E5_MICROSTEPS    E0_MICROSTEPS
     #define E5_RSENSE         0.11
     #define E5_CHAIN_POS     -1
     //#define E5_INTERPOLATE true
@@ -2613,7 +2573,7 @@
 
   #if AXIS_IS_TMC(E6)
     #define E6_CURRENT      800
-    #define E6_MICROSTEPS   E0_MICROSTEPS
+    #define E6_MICROSTEPS    E0_MICROSTEPS
     #define E6_RSENSE         0.11
     #define E6_CHAIN_POS     -1
     //#define E6_INTERPOLATE true
@@ -2621,7 +2581,7 @@
 
   #if AXIS_IS_TMC(E7)
     #define E7_CURRENT      800
-    #define E7_MICROSTEPS   E0_MICROSTEPS
+    #define E7_MICROSTEPS    E0_MICROSTEPS
     #define E7_RSENSE         0.11
     #define E7_CHAIN_POS     -1
     //#define E7_INTERPOLATE true
@@ -2701,7 +2661,7 @@
    */
   #define STEALTHCHOP_XY
   #define STEALTHCHOP_Z
-  #define STEALTHCHOP_E
+  //#define STEALTHCHOP_E
 
   /**
    * Optimize spreadCycle chopper parameters by using predefined parameter sets
@@ -2741,13 +2701,13 @@
    * for error conditions like overtemperature and short to ground.
    * To manage over-temp Marlin can decrease the driver current until the error condition clears.
    * Other detected conditions can be used to stop the current print.
-   * Relevant G-codes:
+   * Relevant g-codes:
    * M906 - Set or get motor current in milliamps using axis codes X, Y, Z, E. Report values if no axis codes given.
    * M911 - Report stepper driver overtemperature pre-warn condition.
    * M912 - Clear stepper driver overtemperature pre-warn condition flag.
    * M122 - Report driver parameters (Requires TMC_DEBUG)
    */
-  //#define MONITOR_DRIVER_STATUS
+  #define MONITOR_DRIVER_STATUS
 
   #if ENABLED(MONITOR_DRIVER_STATUS)
     #define CURRENT_STEP_DOWN     50  // [mA]
@@ -2806,13 +2766,13 @@
    *
    * Comment *_STALL_SENSITIVITY to disable sensorless homing for that axis.
    */
-  //#define SENSORLESS_HOMING // StallGuard capable drivers only
+  #define SENSORLESS_HOMING // StallGuard capable drivers only
 
   #if EITHER(SENSORLESS_HOMING, SENSORLESS_PROBING)
     // TMC2209: 0...255. TMC2130: -64...63
-    #define X_STALL_SENSITIVITY  8
+    #define X_STALL_SENSITIVITY  120
     #define X2_STALL_SENSITIVITY X_STALL_SENSITIVITY
-    #define Y_STALL_SENSITIVITY  8
+    #define Y_STALL_SENSITIVITY  120
     #define Y2_STALL_SENSITIVITY Y_STALL_SENSITIVITY
     //#define Z_STALL_SENSITIVITY  8
     //#define Z2_STALL_SENSITIVITY Z_STALL_SENSITIVITY
@@ -2838,13 +2798,13 @@
    * Beta feature!
    * Create a 50/50 square wave step pulse optimal for stepper drivers.
    */
-  //#define SQUARE_WAVE_STEPPING
+  #define SQUARE_WAVE_STEPPING
 
   /**
    * Enable M122 debugging command for TMC stepper drivers.
    * M122 S0/1 will enable continous reporting.
    */
-  //#define TMC_DEBUG
+  #define TMC_DEBUG
 
   /**
    * You can set your own advanced settings by filling in predefined functions.
@@ -3034,7 +2994,7 @@
    * Monitor L6470 drivers for error conditions like over temperature and over current.
    * In the case of over temperature Marlin can decrease the drive until the error condition clears.
    * Other detected conditions can be used to stop the current print.
-   * Relevant G-codes:
+   * Relevant g-codes:
    * M906 - I1/2/3/4/5  Set or get motor drive level using axis codes X, Y, Z, E. Report values if no axis codes given.
    *         I not present or I0 or I1 - X, Y, Z or E0
    *         I2 - X2, Y2, Z2 or E1
@@ -3111,11 +3071,11 @@
   //#define PHOTO_RETRACT_MM   6.5                          // (mm) E retract/recover for the photo move (M240 R S)
 
   // Canon RC-1 or homebrew digital camera trigger
-  // Data from: https://www.doc-diy.net/photo/rc-1_hacked/
+  // Data from: http://www.doc-diy.net/photo/rc-1_hacked/
   //#define PHOTOGRAPH_PIN 23
 
   // Canon Hack Development Kit
-  // https://captain-slow.dk/2014/03/09/3d-printing-timelapses/
+  // http://captain-slow.dk/2014/03/09/3d-printing-timelapses/
   //#define CHDK_PIN        4
 
   // Optional second move with delay to trigger the camera shutter
@@ -3305,18 +3265,6 @@
 #endif
 
 /**
- * Synchronous Laser Control with M106/M107
- *
- * Marlin normally applies M106/M107 fan speeds at a time "soon after" processing
- * a planner block. This is too inaccurate for a PWM/TTL laser attached to the fan
- * header (as with some add-on laser kits). Enable this option to set fan/laser
- * speeds with much more exact timing for improved print fidelity.
- *
- * NOTE: This option sacrifices some cooling fan speed options.
- */
-//#define LASER_SYNCHRONOUS_M106_M107
-
-/**
  * Coolant Control
  *
  * Add the M7, M8, and M9 commands to turn mist or flood coolant on and off.
@@ -3375,16 +3323,10 @@
  */
 //#define POWER_MONITOR_CURRENT   // Monitor the system current
 //#define POWER_MONITOR_VOLTAGE   // Monitor the system voltage
-
-#if ENABLED(POWER_MONITOR_CURRENT)
-  #define POWER_MONITOR_VOLTS_PER_AMP    0.05000  // Input voltage to the MCU analog pin per amp  - DO NOT apply more than ADC_VREF!
-  #define POWER_MONITOR_CURRENT_OFFSET   0        // Offset (in amps) applied to the calculated current
+#if EITHER(POWER_MONITOR_CURRENT, POWER_MONITOR_VOLTAGE)
+  #define POWER_MONITOR_VOLTS_PER_AMP   0.05000   // Input voltage to the MCU analog pin per amp  - DO NOT apply more than ADC_VREF!
+  #define POWER_MONITOR_VOLTS_PER_VOLT  0.11786   // Input voltage to the MCU analog pin per volt - DO NOT apply more than ADC_VREF!
   #define POWER_MONITOR_FIXED_VOLTAGE   13.6      // Voltage for a current sensor with no voltage sensor (for power display)
-#endif
-
-#if ENABLED(POWER_MONITOR_VOLTAGE)
-  #define POWER_MONITOR_VOLTS_PER_VOLT  0.077933  // Input voltage to the MCU analog pin per volt - DO NOT apply more than ADC_VREF!
-  #define POWER_MONITOR_VOLTAGE_OFFSET  0         // Offset (in volts) applied to the calculated voltage
 #endif
 
 /**
@@ -3405,7 +3347,7 @@
  */
 #define EXTENDED_CAPABILITIES_REPORT
 #if ENABLED(EXTENDED_CAPABILITIES_REPORT)
-  //#define M115_GEOMETRY_REPORT
+  #define M115_GEOMETRY_REPORT
 #endif
 
 /**
@@ -3457,8 +3399,6 @@
 //#define M114_REALTIME       // Real current position based on forward kinematics
 //#define M114_LEGACY         // M114 used to synchronize on every call. Enable if needed.
 
-//#define REPORT_FAN_CHANGE   // Report the new fan speed when changed by M106 (and others)
-
 /**
  * Set the number of proportional font spaces required to fill up a typical character space.
  * This can help to better align the output of commands like `G29 O` Mesh Output.
@@ -3481,7 +3421,7 @@
 //#define MEATPACK_ON_SERIAL_PORT_1
 //#define MEATPACK_ON_SERIAL_PORT_2
 
-//#define GCODE_CASE_INSENSITIVE  // Accept G-code sent to the firmware in lowercase
+#define GCODE_CASE_INSENSITIVE  // Accept G-code sent to the firmware in lowercase
 
 //#define REPETIER_GCODE_M360     // Add commands originally from Repetier FW
 
@@ -3518,7 +3458,6 @@
   #define GCODE_MACROS_SLOTS       5  // Up to 10 may be used
   #define GCODE_MACROS_SLOT_SIZE  50  // Maximum length of a single macro
 #endif
-
 /**
  * User-defined menu items to run custom G-code.
  * Up to 25 may be defined, but the actual number is LCD-dependent.
@@ -3555,9 +3494,9 @@
 #endif
 
 // Custom Menu: Configuration Menu
-//#define CUSTOM_MENU_CONFIG
+#define CUSTOM_MENU_CONFIG
 #if ENABLED(CUSTOM_MENU_CONFIG)
-  //#define CUSTOM_MENU_CONFIG_TITLE "Custom Commands"
+  #define CUSTOM_MENU_CONFIG_TITLE "Custom Commands"
   #define CUSTOM_MENU_CONFIG_SCRIPT_DONE "M117 Wireless Script Done"
   #define CUSTOM_MENU_CONFIG_SCRIPT_AUDIBLE_FEEDBACK
   //#define CUSTOM_MENU_CONFIG_SCRIPT_RETURN  // Return to status screen after a script
@@ -3571,8 +3510,8 @@
   #define CONFIG_MENU_ITEM_2_GCODE "M118 [ESP110] BT pwd=12345678"
   //#define CONFIG_MENU_ITEM_2_CONFIRM
 
-  //#define CONFIG_MENU_ITEM_3_DESC "Radio OFF"
-  //#define CONFIG_MENU_ITEM_3_GCODE "M118 [ESP110] OFF pwd=12345678"
+  #define CONFIG_MENU_ITEM_3_DESC "Reset"
+  #define CONFIG_MENU_ITEM_3_GCODE "M997"
   //#define CONFIG_MENU_ITEM_3_CONFIRM
 
   //#define CONFIG_MENU_ITEM_4_DESC "Wifi ????"
@@ -3635,22 +3574,23 @@
   //#define HOST_START_MENU_ITEM  // Add a menu item that tells the host to start
 #endif
 
+
 /**
  * Cancel Objects
  *
  * Implement M486 to allow Marlin to skip objects
  */
-//#define CANCEL_OBJECTS
+#define CANCEL_OBJECTS
 
 /**
  * I2C position encoders for closed loop control.
  * Developed by Chris Barr at Aus3D.
  *
- * Wiki: https://wiki.aus3d.com.au/Magnetic_Encoder
+ * Wiki: http://wiki.aus3d.com.au/Magnetic_Encoder
  * Github: https://github.com/Aus3D/MagneticEncoder
  *
- * Supplier: https://aus3d.com.au/magnetic-encoder-module
- * Alternative Supplier: https://reliabuild3d.com/
+ * Supplier: http://aus3d.com.au/magnetic-encoder-module
+ * Alternative Supplier: http://reliabuild3d.com/
  *
  * Reliabuild encoders have been modified to improve reliability.
  */
@@ -3896,7 +3836,7 @@
 
   /**
    * Using a sensor like the MMU2S
-   * This mode requires a MK3S extruder with a sensor at the extruder idler, like the MMU2S.
+   * This mode only work if you have a MK3S extruder with sensor sensing the extruder idler mmu2s
    * See https://help.prusa3d.com/en/guide/3b-mk3s-mk2-5s-extruder-upgrade_41560, step 11
    */
   #if HAS_PRUSA_MMU2S
