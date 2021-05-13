@@ -109,14 +109,14 @@
 // Z Probe must be this pin
 //
 #ifndef Z_MIN_PROBE_PIN
-  #define Z_MIN_PROBE_PIN                   PA2
+  #define Z_MIN_PROBE_PIN                   PG8
 #endif
 
 //
 // Filament Runout Sensor
 //
 #ifndef FIL_RUNOUT_PIN
-  #define FIL_RUNOUT_PIN                    PE15
+  #define FIL_RUNOUT_PIN                    PB10
 #endif
 #ifndef FIL_RUNOUT2_PIN
   #define FIL_RUNOUT2_PIN                   PE10
